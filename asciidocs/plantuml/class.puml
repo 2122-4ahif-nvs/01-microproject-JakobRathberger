@@ -1,0 +1,27 @@
+@startuml
+
+class Poll {
+    String: name
+    String: description
+}
+
+class Option{
+    Poll: poll
+    DateTime: from
+    DateTime: to
+}
+
+class Vote{
+    Person: person
+    Option: option
+}
+
+class Person {
+    String: name
+}
+
+Poll "1" <-- "*" Option
+Option "1" <-- "*" Vote
+Person "1" <-- "*" Vote
+
+@enduml

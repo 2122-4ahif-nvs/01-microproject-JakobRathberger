@@ -14,8 +14,12 @@ ifdef::backend-html5[]
 // print the toc here (not at the default position)
 //toc::[]
 
-== Header 1
+== Datenmodell
+link:plantuml/class.puml[]
 
+== Kurze Erklärung
 
-=== Header 2
+Eine Umfrage Platform für Termine.
+Pro Umfrage gibt es mehrere Termine zum auswählen.
+Für jede Abstimmung wird auch ein Name gespeichert.
 
