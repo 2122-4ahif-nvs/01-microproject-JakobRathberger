@@ -15,7 +15,10 @@ ifdef::backend-html5[]
 //toc::[]
 
 == Datenmodell
-link:plantuml/class.puml[]
+[plantuml, cld, png, align=left]
+----
+include::plantuml/class.puml[]
+----
 
 == Kurze Erklärung
 
