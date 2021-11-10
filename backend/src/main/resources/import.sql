@@ -1,0 +1,1 @@
+insert into poll(name,description) values ('testPoll', 'testDesc');
