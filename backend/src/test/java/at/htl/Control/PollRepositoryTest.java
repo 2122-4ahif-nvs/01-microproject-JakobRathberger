@@ -12,7 +12,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import javax.transaction.*;
 import javax.inject.Inject;
 
-import static org.assertj.db.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.db.output.Outputs.output;
 
 
 @QuarkusTest
@@ -25,14 +26,9 @@ class PollRepositoryTest {
     @Inject
     UserTransaction tx;
 
-    @Inject
-    AgroalDataSource ds;
-
     @Order(1000)
     @Test
-    void persistPool() throws Exception {
-        Table pollTable = new Table(ds, "Poll");
-
+    void persistPoll() throws Exception {
         tx.begin();
         Poll poll1 = new Poll("Poll1" , "desc1");
         Poll poll2 = new Poll("Poll2" , "desc2");
@@ -40,13 +36,11 @@ class PollRepositoryTest {
         pollRepository.persist(poll2);
         tx.commit();
 
-        pollTable = new Table(ds, "Poll");
-        assertThat(pollTable)
-                .hasNumberOfRows(2)
-                .row(0)
-                .column("Name").value().isEqualTo("Poll1")
-                .row(1)
-                .column("Name").value().isEqualTo("Poll2");
+        Poll p1 = pollRepository.findById(poll1.getId());
+        Poll p2 = pollRepository.findById(poll2.getId());
+
+        assertThat(p1.getName()).isEqualTo(poll1.getName());
+        assertThat(p2.getName()).isEqualTo(poll2.getName());
     }
 
 

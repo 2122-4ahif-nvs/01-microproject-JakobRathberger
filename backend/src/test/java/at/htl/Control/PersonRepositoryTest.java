@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import javax.inject.Inject;
 import javax.transaction.*;
 
-import static org.assertj.db.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -26,14 +26,9 @@ class PersonRepositoryTest {
     @Inject
     PersonRepository personRepository;
 
-    @Inject
-    AgroalDataSource ds;
-
     @Test
     @Order(1000)
     void persistPerson() throws Exception {
-        Table pollTable = new Table(ds, "Person");
-
         tx.begin();
         Person person1 = new Person("p1");
         Person person2 = new Person("p2");
@@ -41,12 +36,10 @@ class PersonRepositoryTest {
         personRepository.persist(person2);
         tx.commit();
 
-        pollTable = new Table(ds, "Person");
-        assertThat(pollTable)
-                .hasNumberOfRows(2)
-                .row(0)
-                .column("Name").value().isEqualTo("p1")
-                .row(1)
-                .column("Name").value().isEqualTo("p2");
+        Person p1 = personRepository.findById(person1.getId());
+        Person p2 = personRepository.findById(person2.getId());
+
+        assertThat(p1.getName()).isEqualTo(person1.getName());
+        assertThat(p2.getName()).isEqualTo(person2.getName());
     }
 }

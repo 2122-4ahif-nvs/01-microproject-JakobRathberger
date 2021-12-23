@@ -17,7 +17,7 @@ import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-import static org.assertj.db.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.db.output.Outputs.output;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,14 +31,9 @@ class OptionRepositoryTest {
     @Inject
     OptionRepository optionRepository;
 
-    @Inject
-    AgroalDataSource ds;
-
     @Test
     @Order(1000)
     void createOption() throws Exception {
-        Table optionTable = new Table(ds, "Option");
-
         tx.begin();
         Poll poll1 = new Poll("Poll11", "desc11");
         LocalDateTime d1 = LocalDateTime.of(2022, Month.JANUARY, 30,  12, 0);
@@ -51,14 +46,14 @@ class OptionRepositoryTest {
         optionRepository.persist(option2);
         tx.commit();
 
-        optionTable = new Table(ds, "Option");
-        assertThat(optionTable)
-                .hasNumberOfRows(2)
-                .row(0)
-                .column("startTime").value().isEqualTo(d1)
-                .column("endTime").value().isEqualTo(d2)
-                .row(1)
-                .column("startTime").value().isEqualTo(d3)
-                .column("endTime").value().isEqualTo(d4);
+        Option o1 = optionRepository.findById(option1.getId());
+        Option o2 = optionRepository.findById(option2.getId());
+
+        assertThat(o1.getStartTime()).isEqualTo(d1);
+        assertThat(o1.getEndTime()).isEqualTo(d2);
+        assertThat(o2.getStartTime()).isEqualTo(d3);
+        assertThat(o2.getEndTime()).isEqualTo(d4);
+
+        assertThat(o1.getPoll().getName()).isEqualTo(poll1.getName());
     }
 }
