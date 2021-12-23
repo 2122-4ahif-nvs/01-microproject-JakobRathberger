@@ -1,1 +1,1 @@
-insert into poll(name,description) values ('testPoll', 'testDesc');
+--insert into poll(name,description) values ('testPoll', 'testDesc');
