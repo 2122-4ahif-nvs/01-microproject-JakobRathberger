@@ -9,18 +9,18 @@ public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Poll poll;
-    private LocalDateTime from;
-    private LocalDateTime to;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     public Option() {
     }
 
-    public Option(Poll poll, LocalDateTime from, LocalDateTime to) {
+    public Option(Poll poll, LocalDateTime startTime, LocalDateTime endTime) {
         this.poll = poll;
-        this.from = from;
-        this.to = to;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getId() {
@@ -39,20 +39,20 @@ public class Option {
         this.poll = poll;
     }
 
-    public LocalDateTime getFrom() {
-        return from;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setFrom(LocalDateTime from) {
-        this.from = from;
+    public void setStartTime(LocalDateTime from) {
+        this.startTime = from;
     }
 
-    public LocalDateTime getTo() {
-        return to;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setTo(LocalDateTime to) {
-        this.to = to;
+    public void setEndTime(LocalDateTime to) {
+        this.endTime = to;
     }
 
     @Override
@@ -60,8 +60,8 @@ public class Option {
         return "Option{" +
                 "id=" + id +
                 ", poll=" + poll +
-                ", from=" + from +
-                ", to=" + to +
+                ", from=" + startTime +
+                ", to=" + endTime +
                 '}';
     }
 }

@@ -8,9 +8,9 @@ public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Person person;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Option option;
 
     public Vote() {
