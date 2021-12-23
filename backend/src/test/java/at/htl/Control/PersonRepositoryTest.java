@@ -5,7 +5,10 @@ import at.htl.entity.Poll;
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.assertj.db.type.Table;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import javax.inject.Inject;
 import javax.transaction.*;
@@ -14,6 +17,7 @@ import static org.assertj.db.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PersonRepositoryTest {
 
     @Inject
@@ -26,6 +30,7 @@ class PersonRepositoryTest {
     AgroalDataSource ds;
 
     @Test
+    @Order(1000)
     void persistPerson() throws Exception {
         Table pollTable = new Table(ds, "Person");
 
