@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import javax.transaction.*;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.assertj.db.output.Outputs.output;
@@ -25,6 +26,18 @@ class PollRepositoryTest {
 
     @Inject
     UserTransaction tx;
+
+    @Order(990)
+    @Test
+    void testPollValidation(){
+        pollRepository.validatePoll(new Poll("Name1", "Desc1"));
+
+        try {
+            pollRepository.validatePoll(new Poll("Nam", "Des"));
+        } catch (ConstraintViolationException e){
+
+        }
+    }
 
     @Order(1000)
     @Test
