@@ -17,15 +17,13 @@ import javax.ws.rs.core.Response;
 public class PollResource {
 
     @Inject
-    EntityManager em;
+    PollRepository pollRepository;
 
     @Path("/id/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPoll(@PathParam("id") String id) {
-        TypedQuery<Poll> query = em.createQuery("select p from Poll p where p.id = " + id, Poll.class);
-        Poll poll = query.getSingleResult();
-
+        Poll poll = pollRepository.findById(Long.valueOf(id));
         return Response.ok(
                 poll
         ).build();
