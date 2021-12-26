@@ -17,19 +17,19 @@ class PollResourceTest {
     @Test
     @Order(1000)
     void getSinglePolls(){
-        given().when().get("http://localhost:8081/api/poll/id/1")
+        given().when().get("poll/id/1")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project1\",\"id\":1,\"name\":\"Meeting\"}"));
-        given().when().get("http://localhost:8081/api/poll/id/2")
+        given().when().get("poll/id/2")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project2\",\"id\":2,\"name\":\"Meeting\"}"));
-        given().when().get("http://localhost:8081/api/poll/id/3")
+        given().when().get("poll/id/3")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project1\",\"id\":3,\"name\":\"Meeting\"}"));
-        given().when().get("http://localhost:8081/api/poll/id/4")
+        given().when().get("poll/id/4")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project3\",\"id\":4,\"name\":\"Meeting\"}"));
-        given().when().get("http://localhost:8081/api/poll/id/5")
+        given().when().get("poll/id/5")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project4\",\"id\":5,\"name\":\"Meeting\"}"));
     }
