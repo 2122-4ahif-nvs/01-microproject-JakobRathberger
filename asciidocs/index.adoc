@@ -26,3 +26,32 @@ Eine Umfrage Platform für Termine.
 Pro Umfrage gibt es mehrere Termine zum auswählen.
 Für jede Abstimmung wird auch ein Name gespeichert.
 
+== Technologien vom Unterricht
+=== GraphQL
+.PollResources
+[source,java]
+----
+@GraphQLApi
+@Path("/poll")
+public class PollResource {
+
+    @Inject
+    PollRepository pollRepository;
+
+    @Path("/id/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPoll(@PathParam("id") String id) {
+        Poll poll = pollRepository.findById(Long.valueOf(id));
+        return Response.ok(
+                poll
+        ).build();
+    }
+
+    @Query("getSinglePoll")
+    @Description("returns a single poll with the given id")
+    public Poll getSinglePoll(@Name("pollId") long id){
+        return pollRepository.findById(id);
+    }
+}
+----
