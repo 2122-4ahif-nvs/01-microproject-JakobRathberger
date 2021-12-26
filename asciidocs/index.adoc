@@ -1,6 +1,6 @@
 = Doodle
 Jakob Rathberger
-1.0.0, 2021-11-09: Doodle
+1.1.0, 2021-12-26: Doodle
 ifndef::imagesdir[:imagesdir: images]
 //:toc-placement!:  // prevents the generation of the doc at this position, so it can be printed afterwards
 :sourcedir: ../src/main/java
@@ -54,4 +54,36 @@ public class PollResource {
         return pollRepository.findById(id);
     }
 }
+----
+=== Qute
+
+.PollResources
+[source,java]
+----
+    @CheckedTemplate
+    public static class Templates {
+        public static native TemplateInstance poll(Poll poll);
+    }
+
+    @GET
+    @Path("/page/id/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getPollPage(@PathParam("id") long id){
+        return Templates.poll(pollRepository.findById(id));
+    }
+----
+.poll.html
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{poll.name}</title>
+</head>
+<body>
+<h1>{poll.name}</h1>
+<p1>{poll.description}</p1>
+</body>
+</html>
 ----

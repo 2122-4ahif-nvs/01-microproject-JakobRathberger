@@ -2,6 +2,8 @@ package at.htl.boundary;
 
 import at.htl.Control.PollRepository;
 import at.htl.entity.Poll;
+import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.TemplateInstance;
 import org.eclipse.microprofile.graphql.Description;
 import org.eclipse.microprofile.graphql.GraphQLApi;
 import org.eclipse.microprofile.graphql.Name;
@@ -38,5 +40,17 @@ public class PollResource {
     @Description("returns a single poll with the given id")
     public Poll getSinglePoll(@Name("pollId") long id){
         return pollRepository.findById(id);
+    }
+
+    @CheckedTemplate
+    public static class Templates {
+        public static native TemplateInstance poll(Poll poll);
+    }
+
+    @GET
+    @Path("/page/id/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance getPollPage(@PathParam("id") long id){
+        return Templates.poll(pollRepository.findById(id));
     }
 }
