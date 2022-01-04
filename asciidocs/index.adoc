@@ -123,3 +123,10 @@ void testPollValidation(){
     }
 }
 ----
+
+=== GRPC
+
+Since this Project does not use reactive and grpc needs it, the Grpc Tutorials don't work.
+Reason for this is that the quarkus-resteasy and quarkus-resteasy-reactive are not compatible.
+
+Instead look at: https://github.com/JakobRathberger/grpc-quarkus-demo
