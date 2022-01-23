@@ -130,3 +130,61 @@ Since this Project does not use reactive and gRPC needs it, the gRPC Tutorials d
 Reason for this is that the quarkus-resteasy and quarkus-resteasy-reactive are not compatible.
 
 Instead look at: https://github.com/JakobRathberger/grpc-quarkus-demo
+
+=== SECURITY WITH .PROPERTIES FILE
+
+.application.properties
+[]
+----
+quarkus.security.users.file.enabled=true
+quarkus.security.users.file.users=doodle-users.properties
+quarkus.security.users.file.roles=doodle-roles.properties
+quarkus.security.users.file.realm-name=DoodleRealm
+quarkus.security.users.file.plain-text=true
+----
+
+Assigned Roles to Users:
+
+.doodle-roles.properties
+[]
+----
+scott=admin,user
+jdoe=NoRolesUser
+stuart=admin,user
+noadmin=user
+----
+
+Assigned Passwords to Users:
+
+.doodle-users.properties
+[]
+----
+scott=jb0ss
+jdoe=p4ssw0rd
+stuart=test
+noadmin=n0Adm1n
+----
+
+Added to Endpoint Methods to authorize User:
+
+.OptionRessource
+[soruce,java]
+----
+@RolesAllowed({"admin", "user"})
+----
+
+Testing it:
+
+.requests.http
+[]
+----
+###
+# works
+GET http://localhost:8080/api/option/id/1
+Authorization: Basic scott jb0ss
+
+###
+# doese not work
+GET http://localhost:8080/api/option/id/1
+Authorization: Basic noadmin user
+----
