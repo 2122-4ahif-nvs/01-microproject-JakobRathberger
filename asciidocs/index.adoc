@@ -188,3 +188,14 @@ Authorization: Basic scott jb0ss
 GET http://localhost:8080/api/option/id/1
 Authorization: Basic noadmin user
 ----
+
+Update OptionResourceTest to work with authentication by changing this
+----
+given().when().get(path + "1")
+                .then().statusCode(200);
+----
+to this
+----
+given().auth().basic("scott", "jb0ss").when().get(path + "1")
+                .then().statusCode(200);
+----
