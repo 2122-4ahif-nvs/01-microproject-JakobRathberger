@@ -1,1 +1,12 @@
 GET http://localhost:8080/api/poll/id/1
+
+###
+# works
+GET http://localhost:8080/api/option/id/1
+Authorization: Basic scott jb0ss
+
+###
+# doese not work
+GET http://localhost:8080/api/option/id/1
+Authorization: Basic noadmin user
+
