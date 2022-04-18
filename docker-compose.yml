@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"  # the HTTP endpoint
   db:
-    container_name: payment_postgres
+    container_name: microproject-db
     image: postgres:13.3-alpine
     restart: unless-stopped
     environment:
