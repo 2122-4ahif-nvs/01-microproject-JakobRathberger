@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  leo-iot-server:
+  backend:
     depends_on: [db]
     image: ghcr.io/jakobrathberger/microproject-backend:latest
     build: backend
