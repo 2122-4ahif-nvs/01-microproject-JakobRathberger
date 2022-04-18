@@ -1,0 +1,27 @@
+name: Continous Integration
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build_push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install git-secret
+        uses: Kingmidas74/git-secret-github-action@latest
+      - name: Build
+        run: |
+          docker-compose build
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Push
+        run: docker-compose push

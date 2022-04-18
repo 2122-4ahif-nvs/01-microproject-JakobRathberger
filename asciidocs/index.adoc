@@ -55,6 +55,10 @@ public class PollResource {
     }
 }
 ----
+Wurde aus dem Main-Branch entfernt, da es nicht mehr benötigt wird.
+Letzter Stand wo diese Technologie noch verwendet wurde:
+https://github.com/2122-4ahif-nvs/01-microproject-JakobRathberger/tree/8d2fa1b332337cce728cefc48c754c28271432e4
+
 === Qute
 
 .PollResources
