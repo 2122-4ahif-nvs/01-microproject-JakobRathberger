@@ -3,7 +3,7 @@ version: '3.7'
 services:
   leo-iot-server:
     depends_on: [db]
-    image: ghcr.io/jakobrathberger/01-microproject-jakobrathberger/app
+    image: ghcr.io/jakobrathberger/microproject-backend
     build: backend
     container_name: backend
     ports:
