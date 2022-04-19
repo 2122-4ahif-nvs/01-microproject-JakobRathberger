@@ -3,7 +3,6 @@ version: '3.7'
 services:
   backend:
     depends_on: [db]
-    network_mode: "host"
     image: ghcr.io/jakobrathberger/microproject-backend:latest
     build: backend
     container_name: backend
@@ -18,7 +17,7 @@ services:
       POSTGRES_PASSWORD: app
       POSTGRES_DB: db
     ports:
-      - "5432:5432"
+      - "5432"
     volumes:
       - ./backend/db-postgres/db:/var/lib/postgresql/data
       - ./backend/db-postgres/import:/import
