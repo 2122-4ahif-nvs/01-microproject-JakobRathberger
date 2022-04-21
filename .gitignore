@@ -12,3 +12,4 @@ gh-pages/
 *.zip
 backend/db-postgres/
 backend/datasources.txt
+dist
