@@ -21,3 +21,20 @@ services:
     volumes:
       - ./backend/db-postgres/db:/var/lib/postgresql/data
       - ./backend/db-postgres/import:/import
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: db
+      DB_DATABASE: db
+      DB_USER: app
+      DB_SCHEMA: public
+      DB_PASSWORD: app
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: someRandomPassword
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
