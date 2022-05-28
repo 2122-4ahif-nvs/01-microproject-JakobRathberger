@@ -24,7 +24,7 @@ public class OptionResource {
 
     @Path("/id/{id}")
     @GET
-    @RolesAllowed({"admin", "user"})
+    //@RolesAllowed({"admin", "user"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPoll(@PathParam("id") String id) {
         Option option = optionRepository.findById(Long.valueOf(id));

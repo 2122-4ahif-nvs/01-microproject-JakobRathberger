@@ -1,5 +1,6 @@
 package at.htl.boundary;
 
+import com.intuit.karate.junit5.Karate;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -33,5 +34,10 @@ class OptionResourceTest {
         given().auth().basic("noadmin", "n0Adm1n").when().get(path + "18")
                 .then().statusCode(200).
                 body(is("{\"endTime\":\"2022-03-18T11:00:00\",\"id\":18,\"poll\":{\"description\":\"Meeting for Project4\",\"id\":5,\"name\":\"Meeting\"},\"startTime\":\"2022-03-18T10:00:00\"}"));
+    }
+
+    @Karate.Test
+    Karate option_crud_in_productEndpointTest() {
+        return Karate.run("options").relativeTo(getClass());
     }
 }
