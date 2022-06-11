@@ -18,19 +18,22 @@ class PersonResourceTest {
     @Order(1000)
     void getSinglePersons(){
         String path = "person/id/";
-        given().when().get(path + "1")
+        String name = "scott";
+        String pw = "jb0ss";
+
+        given().auth().preemptive().basic(name, pw).when().get(path + "1")
                 .then().statusCode(200).
                 body(is("{\"id\":1,\"name\":\"Zoe\"}"));
-        given().when().get(path + "3")
+        given().auth().preemptive().basic(name, pw).when().get(path + "3")
                 .then().statusCode(200).
                 body(is("{\"id\":3,\"name\":\"Eliza\"}"));
-        given().when().get(path + "5")
+        given().auth().preemptive().basic(name, pw).when().get(path + "5")
                 .then().statusCode(200).
                 body(is("{\"id\":5,\"name\":\"Jodie\"}"));
-        given().when().get(path + "8")
+        given().auth().preemptive().basic(name, pw).when().get(path + "8")
                 .then().statusCode(200).
                 body(is("{\"id\":8,\"name\":\"Eve\"}"));
-        given().when().get(path + "9")
+        given().auth().preemptive().basic(name, pw).when().get(path + "9")
                 .then().statusCode(200).
                 body(is("{\"id\":9,\"name\":\"Eve\"}"));
     }

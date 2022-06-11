@@ -3,6 +3,7 @@ package at.htl.boundary;
 import at.htl.Control.PersonRepository;
 import at.htl.entity.Person;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,6 +20,7 @@ public class PersonResource {
 
     @Path("/id/{id}")
     @GET
+    @RolesAllowed({"admin", "user"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPerson(@PathParam("id") String id) {
         Person person = personRepository.findById(Long.valueOf(id));
