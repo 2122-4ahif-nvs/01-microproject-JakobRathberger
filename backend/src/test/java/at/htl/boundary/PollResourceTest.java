@@ -1,5 +1,6 @@
 package at.htl.boundary;
 
+import com.intuit.karate.junit5.Karate;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -38,4 +39,8 @@ class PollResourceTest {
                 body(is("{\"description\":\"Meeting for Project4\",\"id\":5,\"name\":\"Meeting\"}"));
     }
 
+    @Karate.Test
+    Karate option_crud_in_productEndpointTest() {
+        return Karate.run("polls").relativeTo(getClass());
+    }
 }
