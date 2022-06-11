@@ -22,3 +22,16 @@ Feature: Poll get endpoint.
     When method GET
     Then status 200
     And match response == {"description":"testDesc","id":6,"name":"testPoll"}
+
+  Scenario: Update poll
+    Given path 'api/poll'
+    And request { "id": "6", "name": "testPollEdit", "description": "testDescEdit" }
+    When method PUT
+    Then status 200
+    And match response == {"description":"testDescEdit","id":6,"name":"testPollEdit"}
+
+  Scenario: Get updated poll
+    Given path 'api/poll/id/6'
+    When method GET
+    Then status 200
+    And match response == {"description":"testDescEdit","id":6,"name":"testPollEdit"}

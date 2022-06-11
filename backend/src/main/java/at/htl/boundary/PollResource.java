@@ -43,6 +43,18 @@ public class PollResource {
         return Response.created(URI.create("/poll/id/" + p.getId())).build();
     }
 
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @PUT
+    @RolesAllowed({"admin"})
+    @Transactional
+    public Response editPoll(Poll poll){
+        Poll p = pollRepository.findById(poll.getId());
+        p.setName(poll.getName());
+        p.setDescription(poll.getDescription());
+        return Response.ok(p).build();
+    }
+
     @CheckedTemplate
     public static class Templates {
         public static native TemplateInstance poll(Poll poll);
