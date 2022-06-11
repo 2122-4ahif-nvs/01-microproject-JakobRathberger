@@ -27,6 +27,180 @@ Pro Umfrage gibt es mehrere Termine zum auswählen.
 Für jede Abstimmung wird auch ein Name gespeichert.
 
 == Technologien vom Unterricht
+=== github-actions ci-cd
+
+GitHub-actions in this project is used to auto build and deploy it.
+
+It uses the docker-compose.yaml to build it and push it to the GitHub docker registry
+
+.docker-compose.yaml
+[source, yaml]
+----
+  backend:
+    depends_on: [db]
+    image: ghcr.io/jakobrathberger/microproject-backend:latest
+    build: backend
+    container_name: backend
+    ports:
+      - "8080:8080"  # the HTTP endpoint
+----
+.github/workflows/ci-cd.yaml
+[source, yaml]
+----
+  build_push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install git-secret
+        uses: Kingmidas74/git-secret-github-action@latest
+      - name: Build
+        run: |
+          docker-compose build
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PUSH_TOKEN }}
+      - name: Push
+        run: docker-compose push
+----
+
+Then it copies the docker-compose.yaml to a server/vm, pulls and starts the containers.
+.github/workflows/ci-cd.yaml
+[source,yaml]
+----
+  start:
+    name: Start Container
+    needs: [ build_push ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: install ssh key
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.DEPKEY }}
+      - name: create .ssh/known_hosts
+        run: ssh-keyscan -H -t rsa -v ${{ secrets.DEPIP }}  >> ~/.ssh/known_hosts
+      - name: Copy required files
+        run: |
+          scp -r docker-compose.yml ${{ secrets.DEPUSER }}@${{ secrets.DEPIP }}:/home/ubuntu
+      - name: Run Docker Container
+        run: |
+          ssh ${{ secrets.DEPUSER }}@${{ secrets.DEPIP }} "
+          cd /home/ubuntu
+          echo ${{ secrets.PUSH_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker-compose pull
+          docker-compose stop
+          docker-compose rm -f
+          docker-compose up -d
+          "
+----
+
+The GitHub Pages are also build and deployed using GitHub-Actions
+
+[source,yaml]
+.github/workflows/ci-cd.yaml
+----
+  buildGhPages:
+    name: Build & Publish GH Pages🚀
+    runs-on: ubuntu-latest
+    env:
+      INPUTPATH: asciidocs
+      OUTPUTPATH: dist
+      SLIDES: false
+      BRANCH: gh-pages
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        uses: quirinecker/asciidoctor-convert-action@main
+        with:
+          slides: ${{ env.SLIDES }}
+          inputPath: ${{ env.INPUTPATH }}
+          outputPath: ${{ env.OUTPUTPATH }}
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
+          BRANCH: ${{ env.BRANCH }}
+          FOLDER: ${{ env.OUTPUTPATH }}
+----
+
+=== Karate Tests
+
+Following file is needed for basic authentication
+
+.basic-auth.js
+[source, js]
+----
+function fn(creds) {
+    var temp = creds.username + ':' + creds.password;
+    var Base64 = Java.type('java.util.Base64');
+    var encoded = Base64.getEncoder().encodeToString(temp.toString().getBytes());
+    return 'Basic ' + encoded;
+}
+
+----
+
+Following is needed to start the tests
+
+.PollRessourceTest
+[source,java]
+----
+    @Karate.Test
+    Karate option_crud_in_productEndpointTest() {
+        return Karate.run("polls").relativeTo(getClass());
+    }
+----
+
+In this File the tests are written
+
+.polls.feature
+[]
+----
+Feature: Poll get endpoint.
+  An user of the endpoint is able to get a Poll
+
+  Background:
+    * url baseUrl
+    * header Authorization = call read('basic-auth.js') { username: 'scott', password: 'jb0ss' }
+
+  Scenario: Get a poll
+    Given path 'api/poll/id/1'
+    When method GET
+    Then status 200
+    And match response == {"description":"Meeting for Project1","id":1,"name":"Meeting"}
+
+  Scenario: Create a poll
+    Given path 'api/poll'
+    And request { "name": "testPoll", "description": "testDesc" }
+    When method POST
+    Then status 201
+
+  Scenario: Get created poll
+    Given path 'api/poll/id/6'
+    When method GET
+    Then status 200
+    And match response == {"description":"testDesc","id":6,"name":"testPoll"}
+
+  Scenario: Update poll
+    Given path 'api/poll'
+    And request { "id": "6", "name": "testPollEdit", "description": "testDescEdit" }
+    When method PUT
+    Then status 200
+    And match response == {"description":"testDescEdit","id":6,"name":"testPollEdit"}
+
+  Scenario: Get updated poll
+    Given path 'api/poll/id/6'
+    When method GET
+    Then status 200
+    And match response == {"description":"testDescEdit","id":6,"name":"testPollEdit"}
+
+----
+
 === GraphQL
 .PollResources
 [source,java]
