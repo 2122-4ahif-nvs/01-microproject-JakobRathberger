@@ -18,19 +18,22 @@ class PollResourceTest {
     @Order(1000)
     void getSinglePolls(){
         String path = "poll/id/";
-        given().when().get(path + "1")
+        String name = "scott";
+        String pw = "jb0ss";
+
+        given().auth().preemptive().basic(name, pw).when().get(path + "1")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project1\",\"id\":1,\"name\":\"Meeting\"}"));
-        given().when().get(path + "2")
+        given().auth().preemptive().basic(name, pw).when().get(path + "2")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project2\",\"id\":2,\"name\":\"Meeting\"}"));
-        given().when().get(path + "3")
+        given().auth().preemptive().basic(name, pw).when().get(path + "3")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project1\",\"id\":3,\"name\":\"Meeting\"}"));
-        given().when().get(path + "4")
+        given().auth().preemptive().basic(name, pw).when().get(path + "4")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project3\",\"id\":4,\"name\":\"Meeting\"}"));
-        given().when().get(path + "5")
+        given().auth().preemptive().basic(name, pw).when().get(path + "5")
                 .then().statusCode(200).
                 body(is("{\"description\":\"Meeting for Project4\",\"id\":5,\"name\":\"Meeting\"}"));
     }
