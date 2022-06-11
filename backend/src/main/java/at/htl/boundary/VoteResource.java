@@ -3,6 +3,7 @@ package at.htl.boundary;
 import at.htl.Control.VoteRepository;
 import at.htl.entity.Vote;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,8 +20,9 @@ public class VoteResource {
 
     @Path("/id/{id}")
     @GET
+    @RolesAllowed({"admin","user"})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPoll(@PathParam("id") String id) {
+    public Response getVote(@PathParam("id") String id) {
         Vote vote = voteRepository.findById(Long.valueOf(id));
         return Response.ok(
                 vote
