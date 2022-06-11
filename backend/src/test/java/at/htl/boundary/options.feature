@@ -9,3 +9,4 @@ Feature: Option get endpoint.
     Given path 'api/option/id/1'
     When method GET
     Then status 200
+    And match response == {"endTime":"2022-01-30T14:00:00","id":1,"poll":{"description":"Meeting for Project1","id":1,"name":"Meeting"},"startTime":"2022-01-30T12:00:00"}

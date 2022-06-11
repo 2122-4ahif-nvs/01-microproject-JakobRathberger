@@ -9,3 +9,16 @@ Feature: Poll get endpoint.
     Given path 'api/poll/id/1'
     When method GET
     Then status 200
+    And match response == {"description":"Meeting for Project1","id":1,"name":"Meeting"}
+
+  Scenario: Create a poll
+    Given path 'api/poll'
+    And request { "name": "testPoll", "description": "testDesc" }
+    When method POST
+    Then status 201
+
+  Scenario: Get created poll
+    Given path 'api/poll/id/6'
+    When method GET
+    Then status 200
+    And match response == {"description":"testDesc","id":6,"name":"testPoll"}
